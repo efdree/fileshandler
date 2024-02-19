@@ -1,29 +1,29 @@
 import json
 from song import Song
 
+
 class Playlist:
 
     _id_count = 0
 
-    def __init__(self, name, description, songs = [], id = None):
+    def __init__(self, name, description, songs=[], id=None):
         self.id = id or Playlist._id_count + 1
         Playlist._id_count = self.id
         self.name = name
         self.description = description
-        self.songs = [Song(**song_data) for song_data in songs] if songs else []
-    
+        self.songs = [Song(**song_data)
+                      for song_data in songs] if songs else []
+
     def details(self):
         return [self.id, self.name, self.description, f"{len(self.songs)} songs"]
 
     def to_json(self):
-        return {"id": self.id, "name": self.name, "description":self.description, "songs":self.songs}
+        return {"id": self.id, "name": self.name, "description": self.description, "songs": [song.__dict__ for song in self.songs]}
 
-    def update(self,name, description):
+    def update(self, name, description):
         if name == "":
             self.name = name
-        
-        if description =="":
+
+        if description == "":
             self.description = description
-
-        
-
+        return {"id": self.id, "name": name, "description": description, "songs": self.songs}
